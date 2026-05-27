@@ -1,4 +1,4 @@
-import { cart,cartAmount, renderCartAmount } from "./cart.js"
+import { cart,cartAmount, renderCart, renderCartAmount } from "./cart.js"
 import { creditContainer } from "./paymentContainers/credit/credit.js"
 import { debitContainer } from "./paymentContainers/debit/debit.js"
 import { pixContainer } from "./paymentContainers/pix/pix.js"
@@ -71,7 +71,11 @@ const titleModal=()=>{
 title.textContent="Realizar pagamento!"
 return title
 }
+export const removeModal=(product)=>{
+  const modal=document.querySelector(`#payment-${product.id}`)
 
+modal.remove()
+}
 export const renderPaymentModal=(product)=>{
 const modal=modalDiv(product)
 
@@ -88,31 +92,7 @@ const credit= creditContainer(product)
 
 const debit= debitContainer(product)
 
-const paybtn= document.createElement('button')
-paybtn.textContent='Pay'
-paybtn.addEventListener('click',()=>{
-const payMethod= document.querySelector('input[name="payment"]:checked')
-if(!payMethod){
-    alert('Selecione um método de pagamento')
-}else{
-    payments.push({
-        payMethod:payMethod.value,total:formatter(total)
-    })
-}
 
-localStorage.setItem('payments',JSON.stringify(payments))
-    const payed= document.getElementById('pixId').value
-    const sub= total-Number(payed)
-   
-    const element= document.querySelector('#budget')
-    
-    element.textContent=formatter(sub)
-modal.remove()
-
-
-
-
-})
 const button=document.createElement('button')
 button.textContent='Close'
 button.addEventListener('click',()=>{
@@ -123,4 +103,47 @@ content.append(title, amount, pix, credit, debit,button)
 modal.append(content)
 document.body.append(modal)
 
+}
+export const pay=(product)=>{
+
+    const total=cartAmount()
+const paybtn= document.createElement('button')
+paybtn.textContent='Pay'
+paybtn.addEventListener('click',()=>{
+const payMethod= document.querySelector('input[name="payment"]:checked')
+   if (!payMethod) {
+        alert('Selecione um método de pagamento')
+        return
+    }
+console.log('paym',payMethod.value)
+const paymentData= {method:payMethod.value,total:total}
+if(payMethod.value==='pix'){
+    const pixKey= document.querySelector('#pixKey')
+    const pixValue= document.querySelector('#total')
+
+    paymentData.pixKey=pixKey?.value
+    paymentData.pixValue=pixValue?.value
+}
+if(payMethod.value === 'credito'|| payMethod.value === 'debito'){
+    const flag= document.querySelector("input[name='flag']:checked")
+    paymentData.flag=flag?.value
+    console.log('payf',paymentData.flag)
+}
+if(payMethod.value === 'credito'){
+    const installments=document.querySelector('#installments')
+    paymentData.installments=installments?.value
+}
+payments.push(paymentData)
+localStorage.setItem('payments',JSON.stringify(payments))
+localStorage.removeItem('cart')
+const payment=document.querySelector('#payment')
+const amount= document.querySelector("#budget")
+const cart= document.querySelector('#cart')
+const modal= removeModal(product)
+amount.textContent=formatter(0)
+cart.innerHTML=''
+
+
+})
+return paybtn
 }

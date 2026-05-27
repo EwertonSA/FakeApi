@@ -1,5 +1,5 @@
 import { cartAmount } from "../../cart.js"
-import { createImage, createInput, createLabel, createSelect, feeCalculate } from "../../payment.js"
+import { createImage, createInput, createLabel, createSelect, feeCalculate, pay } from "../../payment.js"
 import { formatter } from "../../script.js"
 import { backButton } from "../pix/pix.js"
 
@@ -13,7 +13,7 @@ const total= cartAmount()
    input.classList.add('payment-modal-value')
 input.addEventListener('click',()=>{
 const content= document.querySelector(`#content-${product.id}`)
-content.innerHTML=''
+
 const title= document.createElement('h3')
 title.textContent="CREDIT PAYMENT"
 
@@ -33,7 +33,7 @@ const eloImage= createImage('https://demonstre.com/wp-content/uploads/2022/11/el
 const expressImage= createImage('https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg','credit-image')
 
 
-const select =createSelect('payments','payment',[{value:'1x',text:`Valor:1 de ${formatter(total)} `},
+const select =createSelect('installments','installment',[{value:'1x',text:`Valor:1 de ${formatter(total)} `},
     {value:'2x',text:`Valor 2x ${formatter(feeCalculate(total,2))} `},
     {value:'3x',text:`Valor 3x:${formatter(feeCalculate(total,3))}`},
     {value:'4x',text:`Valor 4x:${formatter(feeCalculate(total,4))}`},
@@ -45,8 +45,8 @@ const select =createSelect('payments','payment',[{value:'1x',text:`Valor:1 de ${
     {value:'10x',text:`Valor 10x:${formatter(feeCalculate(total,10))}`}
 
 ])
-
-content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,select,closeButton)
+const payment=pay(product)
+content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,select,payment,closeButton)
 })
 return container
 }

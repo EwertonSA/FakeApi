@@ -141,7 +141,7 @@ return button
 
 }
 
-const renderCart=(product)=>{
+export const renderCart=(product)=>{
   
     const container=renderContainer(product) 
     container.classList.add('cart-container')
@@ -168,7 +168,7 @@ const renderCart=(product)=>{
   
   container.append(image,title,price,quantity,deleteBtn)
 }
-const renderAllCart=()=>{
+export const renderAllCart=()=>{
     const container= document.querySelector("#cart")
     container.innerHTML=''
     cart.forEach((product)=>{
