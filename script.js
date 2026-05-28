@@ -99,6 +99,11 @@ const renderRating=(product)=>{
    rating.textContent=stars
     return rating
 }
+const renderInStock=(product)=>{
+    const stock= document.createElement('span')
+    stock.textContent=product.inStock
+    return stock
+}
 const renderAddButton=(product)=>{
     const button=document.createElement('button')
     button.id=`addButton-${product.id}`
@@ -204,6 +209,7 @@ const renderProducts=(product)=>{
     const section= document.querySelector('#products')
     const container= renderContainer(product)
 const title= renderTitle(product)
+const inStock=renderInStock(product)
 const image= renderImage(product)
 const price= renderPrice(product)
 const category= renderCategory(product)
@@ -213,7 +219,7 @@ const more= renderMoreDescription(product)
 const add= renderAddButton(product)
 
 section.append(container)
-container.append(title,image,rating,price,description,add)
+container.append(title,inStock,image,rating,price,description,add)
 }
 
 

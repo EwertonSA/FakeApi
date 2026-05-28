@@ -1,5 +1,7 @@
 import { createImage, createInput, createLabel } from "../../payment.js"
+
 import { backButton } from "../pix/pix.js"
+import { pixValue } from "../pix/pixValue.js"
 
 export const debitContainer=(product)=>{
     const container=document.createElement('div')
@@ -9,8 +11,15 @@ export const debitContainer=(product)=>{
     container.append(input,label)
     input.classList.add('payment-modal-value')
     input.addEventListener('click',()=>{
+    const payments= document.querySelectorAll('input[name="payment"]')
+
+payments.forEach((payment)=>{
+  if(payment !== input){
+payment.disabled=true
+  }
+})
         const content= document.querySelector(`#content-${product.id}`)
-        content.innerHTML=''
+    
         const title= document.createElement('h3')
     title.textContent="DEBIT PAYMENT"
     
@@ -18,7 +27,7 @@ export const debitContainer=(product)=>{
     const visa=createInput('visa','flag','visa','radio')
     const elo= createInput('elo','flag','elo','radio')
     const express= createInput('express','flag','express','radio')
-    const inputvaluePayed= createInput('payed','payed','payed','number')
+  const debit= pixValue()
     
     const masterLabel= createLabel('master','MarsterCard')
     const visaLabel= createLabel('visa',"Visa")
@@ -29,8 +38,8 @@ export const debitContainer=(product)=>{
     const visaImage= createImage("https://logosmarcas.net/wp-content/uploads/2020/04/Visa-Emblema.png",'credit-image')
     const eloImage= createImage('https://demonstre.com/wp-content/uploads/2022/11/elo.png','credit-image')
     const expressImage= createImage('https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg','credit-image')
-    
-      content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,inputvaluePayed,closeButton)
+  
+      content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,debit,payment,closeButton)
     
     })
     return container    

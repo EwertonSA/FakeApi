@@ -1,4 +1,5 @@
 import {  createButton, createInput, createLabel, createSelect, renderPaymentModal } from "../../payment.js"
+
 import { pixValue } from "./pixValue.js"
 
 export const pixContainer=(product)=>{
@@ -9,7 +10,14 @@ const   pixInput= createInput(`pix-${product.id}`,'payment','pix','radio')
 pixInput.classList.add('payment-modal-value')
 container.append(pixInput,pixLabel)
 pixInput.addEventListener('click',()=>{
- 
+const payments= document.querySelectorAll('input[name="payment"]')
+
+payments.forEach((payment)=>{
+  if(payment !== pixInput){
+payment.disabled=true
+  }
+})
+
     const pixkeyLabel=createLabel('pixKey',"Pix key:")
     const pixKey=createSelect('pixKey','pixKey',
         [{value:'phone',text:'Phone'},
@@ -19,7 +27,7 @@ pixInput.addEventListener('click',()=>{
         {value:'code',text:"QRcode"}
         ])
           const content= document.querySelector(`#content-${product.id}`)
-        content.innerHTML=''
+
          const dynamic= document.createElement("div")
              content.append(pixkeyLabel,pixKey,dynamic,pix,back)
        
