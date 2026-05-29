@@ -15,7 +15,16 @@ export const pixValue= ()=>{
           element.textContent="Valor excedido"
           return
         }
-     localStorage.setItem('remaining',JSON.stringify(sub))
+
+    if (sub <= 0) {
+
+        localStorage.removeItem('remaining')
+
+    } else {
+
+        localStorage.setItem('remaining', sub)
+    }
+    
   
         element.textContent=formatter(sub)
   })

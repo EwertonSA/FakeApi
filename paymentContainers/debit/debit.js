@@ -31,20 +31,25 @@ const pay=(product)=>{
   const button= document.createElement('button')
   button.textContent='Pay'
   button.addEventListener('click',()=>{
-      const remaining= Number(localStorage.getItem('remaining'))|| 0
+   
     const payment=document.querySelector('#payment')
 const amount= document.querySelector("#budget")
 const cartItems= document.querySelector('#cart')
 const paymentData= paymentMethod()
 if(!paymentData)return
 
-console.log(remaining)
+
+   const remaining= Number(localStorage.getItem('remaining'))
+if (remaining !== null && remaining <= 0) {
+
+    localStorage.removeItem('remaining')
+}
 if(remaining>0){
   amount.textContent = formatter(remaining)
 removeModal(product)
   return
 }
-localStorage.removeItem('remaining')
+
 console.log(paymentData)
 saveOrders(paymentData)
 payments.push(paymentData)

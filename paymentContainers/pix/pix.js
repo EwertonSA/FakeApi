@@ -1,4 +1,6 @@
+import { cartAmount } from "../../cart.js"
 import {  createButton, createInput, createLabel, createSelect, renderPaymentModal } from "../../payment.js"
+import { pay, paymentMethod } from "../credit/credit.js"
 
 import { pixValue } from "./pixValue.js"
 
@@ -17,8 +19,26 @@ payments.forEach((payment)=>{
 payment.disabled=true
   }
 })
+pixKey(product)
+  
+})
 
-    const pixkeyLabel=createLabel('pixKey',"Pix key:")
+
+return container
+}
+export const backButton=(product)=>{
+const button=createButton('Voltar')
+button.addEventListener('click',()=>{
+  const modal=document.querySelector(`#payment-${product.id}`)
+  
+
+  modal.remove()
+  renderPaymentModal(product)
+})
+return button
+} 
+const pixKey=(product)=>{
+  const pixkeyLabel=createLabel('pixKey',"Pix key:")
     const pixKey=createSelect('pixKey','pixKey',
         [{value:'phone',text:'Phone'},
             {value:'cpf',text:"CPF"},
@@ -27,9 +47,11 @@ payment.disabled=true
         {value:'code',text:"QRcode"}
         ])
           const content= document.querySelector(`#content-${product.id}`)
-
+const pix= pixValue()
+const  button= pay(product)
+const back= backButton(product)
          const dynamic= document.createElement("div")
-             content.append(pixkeyLabel,pixKey,dynamic,pix,back)
+             content.append(pixkeyLabel,pixKey,dynamic,pix,button,back)
        
  pixKey.addEventListener('change',()=>{
     dynamic.innerHTML=''
@@ -53,21 +75,4 @@ payment.disabled=true
     }
    dynamic.append(label,input)
  })
-})
-const pix= pixValue()
-
-const back= backButton(product)
-
-return container
 }
-export const backButton=(product)=>{
-const button=createButton('Voltar')
-button.addEventListener('click',()=>{
-  const modal=document.querySelector(`#payment-${product.id}`)
-  
-
-  modal.remove()
-  renderPaymentModal(product)
-})
-return button
-} 
