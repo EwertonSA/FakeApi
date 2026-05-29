@@ -1,6 +1,7 @@
 import { cartAmount } from "../../cart.js"
 import { createImage, createInput, createLabel, createSelect, feeCalculate, removeModal } from "../../payment.js"
 import { formatter } from "../../script.js"
+
 import { backButton } from "../pix/pix.js"
 let payments=JSON.parse(localStorage.getItem('payments'))||[]
 let cart=JSON.parse(localStorage.getItem('cart'))     || []
@@ -62,18 +63,59 @@ return container
 }
 export const pay=(product)=>{
 
-    const total=cartAmount()
+const total=cartAmount()
 const paybtn= document.createElement('button')
 paybtn.textContent='Pay'
 paybtn.addEventListener('click',async()=>{
-const payMethod= document.querySelector('input[name="payment"]:checked')
-   if (!payMethod) {
+
+
+
+const payment=document.querySelector('#payment')
+const amount= document.querySelector("#budget")
+const cartItems= document.querySelector('#cart')
+const paymentData= paymentMethod()
+await updateStock()
+removeModal(product)
+saveOrders(paymentData)
+payments.push(paymentData)
+localStorage.setItem('payments',JSON.stringify(payments))
+localStorage.removeItem('cart')
+
+amount.textContent=formatter(0)
+cartItems.innerHTML=''
+window.location.href="index.html"
+    
+})
+return paybtn
+}
+
+const updateStock=async()=>{
+    for(const cartItem of cart){
+        const response= await fetch(`http://localhost:3000/products/${cartItem.id}`)
+    
+    const productDb= await response.json()
+    if(cartItem.quantity>productDb.inStock){
+        alert(`${productDb.title} sem estoque suficiente`)
+        return
+    }
+    await fetch(`http://localhost:3000/products/${cartItem.id}`,{
+        method:"PUT",
+        headers:{'Content-Type':"application/json"},
+        body:JSON.stringify({...productDb,inStock:productDb.inStock-cartItem.quantity})
+    })
+}
+}
+export const paymentMethod=()=>{
+  const total= cartAmount()
+
+    const payMethod= document.querySelector('input[name="payment"]:checked')
+    console.log(payMethod.value)
+       if (!payMethod) {
         alert('Selecione um método de pagamento')
         return
     }
-console.log('paym',payMethod.value)
-const paymentData= {method:payMethod.value,total:total}
-if(payMethod.value==='pix'){
+    const paymentData= {method:payMethod.value,total:total}
+    if(payMethod.value==='pix'){
     const pixKey= document.querySelector('#pixKey')
     const pixValue= document.querySelector('#total')
 
@@ -83,52 +125,22 @@ if(payMethod.value==='pix'){
 if(payMethod.value === 'credito'|| payMethod.value === 'debito'){
     const flag= document.querySelector("input[name='flag']:checked")
     paymentData.flag=flag?.value
+    console.log(flag)
 
 }
 if(payMethod.value === 'credito'){
     const installments=document.querySelector('#installments')
     paymentData.installments=installments?.value
+    console.log(document.querySelector('#installments'))
 }
-const payment=document.querySelector('#payment')
-const amount= document.querySelector("#budget")
-const cartItems= document.querySelector('#cart')
-const modal= removeModal(product)
 
-for (const cartItem of cart) {
-
-   const response = await fetch(
-      `http://localhost:3000/products/${cartItem.id}`
-   )
-
-   const dbProduct = await response.json()
-
-   if (cartItem.quantity > dbProduct.inStock) {
-
-      alert(
-         `${dbProduct.title} sem estoque suficiente`
-      )
-
-      return
-   }
-
-   await fetch(
-      `http://localhost:3000/products/${cartItem.id}`,
-      {
-         method: 'PATCH',
-         headers: {
-            'Content-Type': 'application/json'
-         },
-         body: JSON.stringify({
-            inStock:
-               dbProduct.inStock -
-               cartItem.quantity
-         })
-      }
-   )
+  return paymentData
 
 }
-console.log(total)
+
+export const saveOrders=(paymentData)=>{
 const orders= JSON.parse(localStorage.getItem('orders'))|| []
+const total=cartAmount()
 
 const order= {
     id: Date.now(),
@@ -140,15 +152,4 @@ const order= {
 }
 orders.push(order)
 localStorage.setItem('orders',JSON.stringify(orders))
-payments.push(paymentData)
-localStorage.setItem('payments',JSON.stringify(payments))
-localStorage.removeItem('cart')
-
-amount.textContent=formatter(0)
-cartItems.innerHTML=''
-
-
-})
-return paybtn
 }
-

@@ -1,3 +1,4 @@
+import { cartAmount } from "../../cart.js"
 import { createImage, createInput, createLabel } from "../../payment.js"
 
 import { backButton } from "../pix/pix.js"
@@ -38,8 +39,8 @@ payment.disabled=true
     const visaImage= createImage("https://logosmarcas.net/wp-content/uploads/2020/04/Visa-Emblema.png",'credit-image')
     const eloImage= createImage('https://demonstre.com/wp-content/uploads/2022/11/elo.png','credit-image')
     const expressImage= createImage('https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg','credit-image')
-  
-      content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,debit,payment,closeButton)
+  const payButton=paymentMethod()
+      content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,debit,payButton,closeButton)
     
     })
     return container    
