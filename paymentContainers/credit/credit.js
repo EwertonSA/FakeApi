@@ -67,9 +67,6 @@ const total=cartAmount()
 const paybtn= document.createElement('button')
 paybtn.textContent='Pay'
 paybtn.addEventListener('click',async()=>{
-
-
-
 const payment=document.querySelector('#payment')
 const amount= document.querySelector("#budget")
 const cartItems= document.querySelector('#cart')

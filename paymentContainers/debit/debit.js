@@ -1,9 +1,11 @@
 import { cartAmount } from "../../cart.js"
-import { createImage, createInput, createLabel } from "../../payment.js"
+import { createImage, createInput, createLabel, removeModal } from "../../payment.js"
+import { formatter } from "../../script.js"
+import {  paymentMethod, saveOrders } from "../credit/credit.js"
 
 import { backButton } from "../pix/pix.js"
 import { pixValue } from "../pix/pixValue.js"
-
+let payments=JSON.parse(localStorage.getItem('payments'))||[]
 export const debitContainer=(product)=>{
     const container=document.createElement('div')
     const label= createLabel('debito',"DÉBITO:")
@@ -19,16 +21,51 @@ payments.forEach((payment)=>{
 payment.disabled=true
   }
 })
-        const content= document.querySelector(`#content-${product.id}`)
+    getFlags(product)
+    })
+    return container    
+}
+const pay=(product)=>{
+
+  const total= cartAmount()
+  const button= document.createElement('button')
+  button.textContent='Pay'
+  button.addEventListener('click',()=>{
+      const remaining= Number(localStorage.getItem('remaining'))|| 0
+    const payment=document.querySelector('#payment')
+const amount= document.querySelector("#budget")
+const cartItems= document.querySelector('#cart')
+const paymentData= paymentMethod()
+if(!paymentData)return
+
+console.log(remaining)
+if(remaining>0){
+  amount.textContent = formatter(remaining)
+removeModal(product)
+  return
+}
+localStorage.removeItem('remaining')
+console.log(paymentData)
+saveOrders(paymentData)
+payments.push(paymentData)
+localStorage.setItem('payments',JSON.stringify(payments))
+localStorage.removeItem('cart')
+removeModal(product)
+cartItems.innerHTML=''
+window.location.href="index.html"
     
-        const title= document.createElement('h3')
+  })
+  return button
+}
+export const getFlags=(product)=>{
+   const content= document.querySelector(`#content-${product.id}`)
+     const title= document.createElement('h3')
     title.textContent="DEBIT PAYMENT"
-    
-    const master= createInput('master','flag','master','radio')
+     const master= createInput('master','flag','master','radio')
     const visa=createInput('visa','flag','visa','radio')
     const elo= createInput('elo','flag','elo','radio')
     const express= createInput('express','flag','express','radio')
-  const debit= pixValue()
+  const debit= pixValue(product)
     
     const masterLabel= createLabel('master','MarsterCard')
     const visaLabel= createLabel('visa',"Visa")
@@ -39,9 +76,7 @@ payment.disabled=true
     const visaImage= createImage("https://logosmarcas.net/wp-content/uploads/2020/04/Visa-Emblema.png",'credit-image')
     const eloImage= createImage('https://demonstre.com/wp-content/uploads/2022/11/elo.png','credit-image')
     const expressImage= createImage('https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg','credit-image')
-  const payButton=paymentMethod()
-      content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,debit,payButton,closeButton)
+      const payButton=pay(product)
+    content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,debit,payButton,closeButton)
     
-    })
-    return container    
 }

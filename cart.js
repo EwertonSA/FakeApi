@@ -114,16 +114,23 @@ const value= cart.reduce((acc,item)=>acc+(item.quantity*Number(item.price)),0)
 
 return value
 }
-export const renderCartAmount=(  value = cartAmount())=>{
-  const amountValue= document.querySelector('#budget')
-  amountValue.classList.add('cart-amount')
-    const data= formatter(cartAmount())
+export const renderCartAmount = () => {
 
-  
-  amountValue.textContent=data
+    const amountValue = document.querySelector('#budget')
 
+    amountValue.classList.add('cart-amount')
 
-return amountValue
+    const storedRemaining =
+        localStorage.getItem('remaining')
+
+    const data =
+        storedRemaining !== null
+            ? formatter(Number(storedRemaining))
+            : formatter(cartAmount())
+
+    amountValue.textContent = data
+
+    return amountValue
 }
 const renderPaymentButton=(product)=>{
 const payment=document.querySelector('#payment')
