@@ -66,9 +66,9 @@ cont.classList.add('cart-modal-content')
 cont.id=`content-${product.id}`
 return cont
 }
-const titleModal=()=>{
+export const titleModal=(param)=>{
     const title= document.createElement('h3')
-title.textContent="Realizar pagamento!"
+title.textContent=param
 return title
 }
 export const removeModal=(product)=>{
@@ -80,8 +80,8 @@ export const renderPaymentModal=(product)=>{
 const modal=modalDiv(product)
 
 const content=contentModal(product)
-
-const title= titleModal()
+content.classList.add('payment-modal-content')
+const title= titleModal("Pagamento")
 const total=cartAmount()
 const amount= formatter(total)
 
@@ -92,15 +92,20 @@ const credit= creditContainer(product)
 
 const debit= debitContainer(product)
 
+const button= closeButton(modal)
 
-const button=document.createElement('button')
-button.textContent='Close'
-button.addEventListener('click',()=>{
-modal.remove()
-})
 
 content.append(title, amount, pix, credit, debit,button)
 modal.append(content)
 document.body.append(modal)
 
+}
+export const closeButton=(modal)=>{
+   
+const button=document.createElement('button')
+button.textContent='Close'
+button.addEventListener('click',()=>{
+modal.remove()
+})
+return button
 }

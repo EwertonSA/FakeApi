@@ -116,14 +116,11 @@ return value
 }
 export const renderCartAmount = () => {
 
-    const amountValue = document.querySelector('#budget')
-
-    amountValue.classList.add('cart-amount')
-
-    const storedRemaining =
+const amountValue = document.querySelector('#budget')
+ amountValue.classList.add('cart-amount')
+const storedRemaining =
         localStorage.getItem('remaining')
-
-    const data =
+const data =
         storedRemaining !== null
             ? formatter(Number(storedRemaining))
             : formatter(cartAmount())
@@ -168,11 +165,8 @@ export const renderCart=(product)=>{
   image.classList.add('cart-image')
 
   const cartContainer= document.querySelector('#cart')
-
   cartContainer.classList.add('cart-section')
-
   cartContainer.append(container)
-  
   container.append(image,title,price,quantity,deleteBtn)
 }
 export const renderAllCart=()=>{

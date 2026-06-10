@@ -1,5 +1,5 @@
 import { cartAmount } from "../../cart.js"
-import { createImage, createInput, createLabel, createSelect, feeCalculate, removeModal } from "../../payment.js"
+import { closeButton, contentModal, createImage, createInput, createLabel, createSelect, feeCalculate, modalDiv, removeModal, titleModal } from "../../payment.js"
 import { formatter } from "../../script.js"
 
 import { backButton } from "../pix/pix.js"
@@ -29,10 +29,17 @@ const title= document.createElement('h3')
 title.textContent="CREDIT PAYMENT"
 
 const master= createInput('master','flag','master','radio')
+master.addEventListener('click',()=>{
+    creditCard(product)
+    masterEloVisaCreditCard()
+})
 const visa=createInput('visa','flag','visa','radio')
 const elo= createInput('elo','flag','elo','radio')
 const express= createInput('express','flag','express','radio')
-
+express.addEventListener('click',()=>{
+    creditCard(product)
+    americanExpressCreditCard()
+})
 const masterLabel= createLabel('master','MarsterCard')
 const visaLabel= createLabel('visa',"Visa")
 const elolabel= createLabel('elo',"Elo")
@@ -60,6 +67,65 @@ const payment= pay(product)
 content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,select,payment,closeButton)
 })
 return container
+}
+
+const creditCard=(product)=>{
+    const modal= modalDiv(product)
+    const title= titleModal("INSERT OR CONFIRM YOUR PERSONAL CREDIT CARD INFO")
+    const content=contentModal(product)
+    content.classList.add("credit-card-payment")
+    const nameLabel=createLabel('name','NAME:')
+    const input= createInput('name','name','','text')
+    input.classList.add('credit-card-input')
+    const numberLabel= createLabel('number','N°:')
+    const inputNumber= createInput('number','number','','text')
+    inputNumber.classList.add('credit-card-input')
+    const codeNmber= createLabel('code', 'CODE:')
+    const codeInput= createInput('code','code','','number')
+    
+const button= closeButton(modal)
+
+    content.append(nameLabel,input,numberLabel,inputNumber, codeInput,button)
+    modal.append(title,content)
+    document.body.append(modal)
+}
+const masterEloVisaCreditCard=()=>{
+    const input= document.querySelector('#number')
+    input.addEventListener('input',(ev)=>{
+        let value= ev.target.value.replace(/\D/g,'')
+        value=value.slice(0,16)
+        value=value.replace(/(\d{4})(?=\d)/g,'$1 ')
+        ev.target.value=value
+    })
+    return input
+}
+const americanExpressCreditCard=()=>{
+    const input = document.querySelector('#number')
+    input.addEventListener('click',(ev)=>{
+
+          let value= ev.target.value.replace(/\D/g,'')
+     
+
+             
+        value=value.slice(0,15)
+        value=value.replace(/^(\d{0,4})(\d{0,6})(\d{0,5})$/,(_,p1,p2,p3)=> {
+            let result= p1
+            if(p2)result +=' '+p2
+            if(p3)result +=' '+p3
+            return result
+        })
+        ev.target.value=value
+        }
+    )
+    input.addEventListener('blur',()=>{
+        const value= input.value.replace(/\D/,g,'')
+    const isAmerican= /^(34|37)/.test(value)
+    if(!isAmerican&&value.length>=2){
+    alert('American express credit card number must start with 34 or 37')
+return
+        }
+    })
+    return input
 }
 export const pay=(product)=>{
 
