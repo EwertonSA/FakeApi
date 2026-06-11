@@ -9,14 +9,14 @@ export const creditContainer=(product)=>{
      
     const container= document.createElement('div')  
    const label= createLabel('credito','CRÉDITO:')
-const total= cartAmount()
+
    const input= createInput(`credito-${product.id}`,'payment','credito','radio')
      container.append(input,label)
 
    input.classList.add('payment-modal-value')
 
 input.addEventListener('click',()=>{
-const content= document.querySelector(`#content-${product.id}`)
+
 const payments= document.querySelectorAll('input[name="payment"]')
 
 payments.forEach((payment)=>{
@@ -25,13 +25,26 @@ payment.disabled=true
   }
 })
 
+creditContent(product)
+
+
+})
+return container
+}
+const creditContent=(product)=>{
+    const modal= modalDiv(product)
+    const content= contentModal(product)
+    content.classList.add("credit-card-payment")
+    const total= cartAmount()
 const title= document.createElement('h3')
 title.textContent="CREDIT PAYMENT"
-
+const flag=document.createElement('div')
+flag.classList.add('credit-payment-flag')
 const master= createInput('master','flag','master','radio')
 master.addEventListener('click',()=>{
     creditCard(product)
     masterEloVisaCreditCard()
+    creditCode()
 })
 const visa=createInput('visa','flag','visa','radio')
 const elo= createInput('elo','flag','elo','radio')
@@ -44,11 +57,16 @@ const masterLabel= createLabel('master','MarsterCard')
 const visaLabel= createLabel('visa',"Visa")
 const elolabel= createLabel('elo',"Elo")
 const expressLabel= createLabel('express','American Express')
-const closeButton= backButton(product)
+const closeBtn= closeButton(modal)
 const masterImage= createImage("https://play-lh.googleusercontent.com/jMECkIn97zzMi1IoWlb9SYjtbYolSPmgdLmylwIwo3pbhQ_omkRMzM0bS-PnN461hg",'credit-image')
 const visaImage= createImage("https://logosmarcas.net/wp-content/uploads/2020/04/Visa-Emblema.png",'credit-image')
 const eloImage= createImage('https://demonstre.com/wp-content/uploads/2022/11/elo.png','credit-image')
 const expressImage= createImage('https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg','credit-image')
+const masterDiv= document.createElement('div')
+
+const visaDiv= document.createElement('div')
+const eloDiv= document.createElement('div')
+const expressDiv= document.createElement('div')
 
 
 const select =createSelect('installments','installment',[{value:'1x',text:`Valor:1 de ${formatter(total)} `},
@@ -63,10 +81,16 @@ const select =createSelect('installments','installment',[{value:'1x',text:`Valor
     {value:'10x',text:`Valor 10x:${formatter(feeCalculate(total,10))}`}
 
 ])
+select.classList.add('installments-select')
 const payment= pay(product)
-content.append(title,masterImage,master,masterLabel,visaImage,visa,visaLabel,eloImage,elo,elolabel,expressImage,express,expressLabel,select,payment,closeButton)
-})
-return container
+masterDiv.append(masterImage,master,masterLabel)
+visaDiv.append(visaImage,visa,visaLabel)
+eloDiv.append(eloImage,elo,elolabel)
+expressDiv.append(expressImage,express,expressLabel)
+flag.append(masterDiv,visaDiv,eloDiv,expressDiv)
+content.append(title,flag,select,payment,closeBtn)
+modal.append(content)
+document.body.append(modal)
 }
 
 const creditCard=(product)=>{
@@ -80,13 +104,13 @@ const creditCard=(product)=>{
     const numberLabel= createLabel('number','N°:')
     const inputNumber= createInput('number','number','','text')
     inputNumber.classList.add('credit-card-input')
-    const codeNmber= createLabel('code', 'CODE:')
+    const codeNumber= createLabel('code', 'CODE:')
     const codeInput= createInput('code','code','','number')
     
 const button= closeButton(modal)
 
-    content.append(nameLabel,input,numberLabel,inputNumber, codeInput,button)
-    modal.append(title,content)
+    content.append(nameLabel,title,input,numberLabel,inputNumber, codeNumber, codeInput,button)
+    modal.append(content)
     document.body.append(modal)
 }
 const masterEloVisaCreditCard=()=>{
@@ -101,7 +125,7 @@ const masterEloVisaCreditCard=()=>{
 }
 const americanExpressCreditCard=()=>{
     const input = document.querySelector('#number')
-    input.addEventListener('click',(ev)=>{
+    input.addEventListener('input',(ev)=>{
 
           let value= ev.target.value.replace(/\D/g,'')
      
@@ -126,6 +150,14 @@ return
         }
     })
     return input
+}
+const creditCode=()=>{
+    const input= document.querySelector('#code')
+    input.addEventListener('input',(ev)=>{
+let value= ev.target.value.replace(/\D/g,'')
+value=value.slice(0,3)
+ev.target.value=value
+})
 }
 export const pay=(product)=>{
 
