@@ -15,7 +15,7 @@ export const creditContainer=(product)=>{
 
    input.classList.add('payment-modal-value')
 
-input.addEventListener('click',()=>{
+input.addEventListener('click',async()=>{
 
 const payments= document.querySelectorAll('input[name="payment"]')
 
@@ -25,13 +25,13 @@ payment.disabled=true
   }
 })
 
-creditContent(product)
+await creditContent(product)
 
 
 })
 return container
 }
-const creditContent=(product)=>{
+const creditContent=async(product)=>{
     const modal= modalDiv(product)
     const content= contentModal(product)
     content.classList.add("credit-card-payment")
@@ -41,17 +41,17 @@ title.textContent="CREDIT PAYMENT"
 const flag=document.createElement('div')
 flag.classList.add('credit-payment-flag')
 const master= createInput('master','flag','master','radio')
-master.addEventListener('click',()=>{
-    creditCard(product)
-    masterEloVisaCreditCard()
-    creditCode()
+master.addEventListener('click',async(ev)=>{
+    await creditCard(product)
+    masterEloVisaCreditCard(ev)
+    creditCode(ev)
 })
 const visa=createInput('visa','flag','visa','radio')
 const elo= createInput('elo','flag','elo','radio')
 const express= createInput('express','flag','express','radio')
-express.addEventListener('click',()=>{
+express.addEventListener('click',(ev)=>{
     creditCard(product)
-    americanExpressCreditCard()
+    americanExpressCreditCard(ev)
 })
 const masterLabel= createLabel('master','MarsterCard')
 const visaLabel= createLabel('visa',"Visa")
@@ -82,7 +82,7 @@ const select =createSelect('installments','installment',[{value:'1x',text:`Valor
 
 ])
 select.classList.add('installments-select')
-const payment= pay(product)
+const payment= await pay(product)
 masterDiv.append(masterImage,master,masterLabel)
 visaDiv.append(visaImage,visa,visaLabel)
 eloDiv.append(eloImage,elo,elolabel)
@@ -94,7 +94,8 @@ document.body.append(modal)
 }
 
 const creditCard=(product)=>{
-    const modal= modalDiv(product)
+return new Promise((resolve)=>{
+        const modal= modalDiv(product)
     const title= titleModal("INSERT OR CONFIRM YOUR PERSONAL CREDIT CARD INFO")
     const content=contentModal(product)
     content.classList.add("credit-card-payment")
@@ -104,25 +105,44 @@ const creditCard=(product)=>{
     const numberLabel= createLabel('number','N°:')
     const inputNumber= createInput('number','number','','text')
     inputNumber.classList.add('credit-card-input')
+    inputNumber.addEventListener('input',(ev)=>{
+        masterEloVisaCreditCard(ev)})
     const codeNumber= createLabel('code', 'CODE:')
     const codeInput= createInput('code','code','','number')
-    
+    codeInput.addEventListener('input',creditCode)
+    const save= document.createElement('button')
+    save.textContent="Save"
+    save.addEventListener('click',async()=>{
+    const info={
+        productId: product.id,
+        inputName:input.value,
+        lastFour:inputNumber.value.slice(-4),
+        code:codeInput.value
+
+    }
+    console.log(info)
+       modal.style.display='none'
+        resolve(info)
+   
+})
 const button= closeButton(modal)
 
-    content.append(nameLabel,title,input,numberLabel,inputNumber, codeNumber, codeInput,button)
+    content.append(nameLabel,title,input,numberLabel,inputNumber, codeNumber, codeInput,save,button)
+      
     modal.append(content)
     document.body.append(modal)
+ })
 }
-const masterEloVisaCreditCard=()=>{
-    const input= document.querySelector('#number')
-    input.addEventListener('input',(ev)=>{
+const masterEloVisaCreditCard=(ev)=>{
+
         let value= ev.target.value.replace(/\D/g,'')
         value=value.slice(0,16)
         value=value.replace(/(\d{4})(?=\d)/g,'$1 ')
         ev.target.value=value
-    })
-    return input
-}
+     
+    }
+  
+
 const americanExpressCreditCard=()=>{
     const input = document.querySelector('#number')
     input.addEventListener('input',(ev)=>{
@@ -142,7 +162,7 @@ const americanExpressCreditCard=()=>{
         }
     )
     input.addEventListener('blur',()=>{
-        const value= input.value.replace(/\D/,g,'')
+        const value= input.value.replace(/\D/g,'')
     const isAmerican= /^(34|37)/.test(value)
     if(!isAmerican&&value.length>=2){
     alert('American express credit card number must start with 34 or 37')
@@ -151,15 +171,18 @@ return
     })
     return input
 }
-const creditCode=()=>{
-    const input= document.querySelector('#code')
-    input.addEventListener('input',(ev)=>{
+
+
+
+
+const creditCode=(ev)=>{
+  
 let value= ev.target.value.replace(/\D/g,'')
 value=value.slice(0,3)
 ev.target.value=value
-})
 }
-export const pay=(product)=>{
+
+export const pay=async(product)=>{
 
 const total=cartAmount()
 const paybtn= document.createElement('button')
@@ -168,7 +191,8 @@ paybtn.addEventListener('click',async()=>{
 const payment=document.querySelector('#payment')
 const amount= document.querySelector("#budget")
 const cartItems= document.querySelector('#cart')
-const paymentData= paymentMethod()
+const paymentData= await paymentMethod(product)
+console.log('teste',paymentData)
 await updateStock()
 removeModal(product)
 saveOrders(paymentData)
@@ -200,7 +224,7 @@ const updateStock=async()=>{
     })
 }
 }
-export const paymentMethod=()=>{
+export const paymentMethod=async(product)=>{
   const total= cartAmount()
 
     const payMethod= document.querySelector('input[name="payment"]:checked')
@@ -219,14 +243,18 @@ export const paymentMethod=()=>{
 }
 if(payMethod.value === 'credito'|| payMethod.value === 'debito'){
     const flag= document.querySelector("input[name='flag']:checked")
+    if(!flag){
+        alert("You must choose a flag for payment")
+    }else{
     paymentData.flag=flag?.value
-    console.log(flag)
+    }
 
 }
 if(payMethod.value === 'credito'){
     const installments=document.querySelector('#installments')
     paymentData.installments=installments?.value
-    console.log(document.querySelector('#installments'))
+   const cardInfo=await creditCard(product)
+   Object.assign(paymentData,cardInfo)
 }
 
   return paymentData

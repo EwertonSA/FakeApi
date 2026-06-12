@@ -41,7 +41,7 @@
     },
     {
       "id": 4,
-      "inStock": 22,
+      "inStock": 18,
       "title": "Mens Casual Slim Fit",
       "price": 15.99,
       "description": "The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
@@ -67,7 +67,7 @@
     },
     {
       "id": 6,
-      "inStock": 22,
+      "inStock": 19,
       "title": "Solid Gold Petite Micropave ",
       "price": 168,
       "description": "Satisfaction Guaranteed. Return or exchange any order within 30 days.Designed and sold by Hafeez Center in the United States. Satisfaction Guaranteed. Return or exchange any order within 30 days.",
@@ -80,7 +80,7 @@
     },
     {
       "id": 7,
-      "inStock": 22,
+      "inStock": 20,
       "title": "White Gold Plated Princess",
       "price": 9.99,
       "description": "Classic Created Wedding Engagement Solitaire Diamond Promise Ring for Her. Gifts to spoil your love more for Engagement, Wedding, Anniversary, Valentine's Day...",
@@ -259,6 +259,22 @@
         "rate": 3.6,
         "count": 145
       }
+    }
+  ],
+  "Payments": [
+    {
+      "productId": "2",
+      "inputName": "Ewerton Silva de Abreu",
+      "lastFour": "4324",
+      "code": "543",
+      "id": 1
+    },
+    {
+      "productId": "4",
+      "inputName": "Ewerton Silva de Abreu",
+      "lastFour": "4324",
+      "code": "433",
+      "id": 2
     }
   ]
 }
