@@ -85,7 +85,7 @@ const renderDescription=(product)=>{
    div.append(description,more)
     return div
 }
-const renderMoreDescription=(product)=>{
+export const renderMoreDescription=(product)=>{
     const button= document.createElement('button')
     button.textContent="More..."
     button.classList.add('product-description-button')
@@ -205,6 +205,7 @@ navigation.append(button)
 return button
 }
 const modal= navigationModalBtn()
+
 const renderProducts=(product)=>{
     const section= document.querySelector('#products')
     const container= renderContainer(product)

@@ -172,6 +172,14 @@ export const renderCart=(product)=>{
 export const renderAllCart=()=>{
     const container= document.querySelector("#cart")
     container.innerHTML=''
+    if(cart.length ===0){
+        const message=document.createElement('h1')
+        message.textContent="There are no products added to cart yet"
+        message.classList.add('cart-message')
+        container.append(message)
+        renderorders()
+        return
+    }
     cart.forEach((product)=>{
         renderCart(product)
     })
@@ -182,3 +190,70 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderAllCart()
 })
 
+const renderorders=()=>{    
+    const orders= JSON.parse(localStorage.getItem('orders'))|| []
+    orders.forEach(order=>{
+    const img = new Image()
+    img.src = order.items[0].image
+})
+   const container= document.querySelector('#orded')
+   container.classList.add('orded-before')
+      const h1=document.createElement('h1')
+       h1.textContent= "Orded before"
+   
+       const carousel=document.createElement('div')
+   carousel.classList.add('carousel')
+
+   const content= document.createElement('div')
+   content.classList.add('orded-content')
+  
+   const title=document.createElement('p') 
+   title.textContent=orders[orders.length-1].items[0].title
+
+   const image= document.createElement('img')
+    image.classList.add('product-image')
+   image.src=orders[orders.length-1].items[0].image
+
+   image.decoding='async'
+   
+       let currentIndex=orders.length-1
+
+       function updateCarousel(){
+        const currentOrder= orders[currentIndex]
+        title.textContent=currentOrder.items[0].title
+        image.src= currentOrder.items[0].image
+       }
+
+   const preveiousNext= document.createElement('button')
+   preveiousNext.textContent='Next'
+   
+   preveiousNext.addEventListener('click',()=>{
+
+    currentIndex++
+    if(currentIndex>=orders.length){
+        currentIndex=0
+    }
+ 
+updateCarousel()
+  
+
+   })
+   const previousBefore= document.createElement('button')
+   previousBefore.textContent="Before"
+previousBefore.addEventListener('click',()=>{
+
+  currentIndex--
+    if(currentIndex<=0){
+        currentIndex=orders.length-1
+    }
+    
+    updateCarousel()
+})
+updateCarousel()
+   console.log(orders)
+   content.append(title,image)
+   carousel.append(previousBefore,content,preveiousNext)
+   container.append(h1,carousel)
+
+
+}
