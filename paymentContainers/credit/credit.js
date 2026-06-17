@@ -41,18 +41,11 @@ title.textContent="CREDIT PAYMENT"
 const flag=document.createElement('div')
 flag.classList.add('credit-payment-flag')
 const master= createInput('master','flag','master','radio')
-master.addEventListener('click',async(ev)=>{
-    await creditCard(product)
-    masterEloVisaCreditCard(ev)
-    creditCode(ev)
-})
+
 const visa=createInput('visa','flag','visa','radio')
 const elo= createInput('elo','flag','elo','radio')
 const express= createInput('express','flag','express','radio')
-express.addEventListener('click',(ev)=>{
-    creditCard(product)
-    americanExpressCreditCard(ev)
-})
+
 const masterLabel= createLabel('master','MarsterCard')
 const visaLabel= createLabel('visa',"Visa")
 const elolabel= createLabel('elo',"Elo")
@@ -106,9 +99,10 @@ return new Promise((resolve)=>{
     const inputNumber= createInput('number','number','','text')
     inputNumber.classList.add('credit-card-input')
     inputNumber.addEventListener('input',(ev)=>{
-        masterEloVisaCreditCard(ev)})
+    masterEloVisaCreditCard(ev)})
     const codeNumber= createLabel('code', 'CODE:')
     const codeInput= createInput('code','code','','number')
+    codeInput.classList.add('credit-card-input')
     codeInput.addEventListener('input',creditCode)
     const save= document.createElement('button')
     save.textContent="Save"

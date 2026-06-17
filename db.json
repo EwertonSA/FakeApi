@@ -54,7 +54,7 @@
     },
     {
       "id": 5,
-      "inStock": 22,
+      "inStock": 21,
       "title": "John Hardy Women's Legends Naga Gold & Silver Dragon Station Chain Bracelet",
       "price": 695,
       "description": "From our Legends Collection, the Naga was inspired by the mythical water dragon that protects the ocean's pearl. Wear facing inward to be bestowed with love and abundance, or outward for protection.",
@@ -119,7 +119,7 @@
     },
     {
       "id": 10,
-      "inStock": 23,
+      "inStock": 22,
       "title": "SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s",
       "price": 109,
       "description": "Easy upgrade for faster boot up, shutdown, application load and response (As compared to 5400 RPM SATA 2.5” hard drive; Based on published specifications and internal benchmarking tests using PCMark vantage scores) Boosts burst write performance, making it ideal for typical PC workloads The perfect balance of performance and reliability Read/write speeds of up to 535MB/s/450MB/s (Based on internal testing; Performance may vary depending upon drive capacity, host device, OS and application.)",
@@ -145,7 +145,7 @@
     },
     {
       "id": 12,
-      "inStock": 23,
+      "inStock": 22,
       "title": "WD 4TB Gaming Drive Works with Playstation 4 Portable External Hard Drive",
       "price": 114,
       "description": "Expand your PS4 gaming experience, Play anywhere Fast and easy, setup Sleek design with high capacity, 3-year manufacturer's limited warranty",
@@ -259,22 +259,6 @@
         "rate": 3.6,
         "count": 145
       }
-    }
-  ],
-  "Payments": [
-    {
-      "productId": "2",
-      "inputName": "Ewerton Silva de Abreu",
-      "lastFour": "4324",
-      "code": "543",
-      "id": 1
-    },
-    {
-      "productId": "4",
-      "inputName": "Ewerton Silva de Abreu",
-      "lastFour": "4324",
-      "code": "433",
-      "id": 2
     }
   ]
 }
