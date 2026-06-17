@@ -90,6 +90,7 @@ const creditCard=(product)=>{
 return new Promise((resolve)=>{
         const modal= modalDiv(product)
     const title= titleModal("INSERT OR CONFIRM YOUR PERSONAL CREDIT CARD INFO")
+     
     const content=contentModal(product)
     content.classList.add("credit-card-payment")
     const nameLabel=createLabel('name','NAME:')
@@ -99,7 +100,14 @@ return new Promise((resolve)=>{
     const inputNumber= createInput('number','number','','text')
     inputNumber.classList.add('credit-card-input')
     inputNumber.addEventListener('input',(ev)=>{
-    masterEloVisaCreditCard(ev)})
+           const flag= document.querySelector("input[name='flag']:checked").value
+        if(flag ==='visa'|| flag === 'master'|| flag==='elo'){
+            masterEloVisaCreditCard(ev)
+        }else if( flag === 'express'){
+            americanExpressCreditCard()
+        }    
+
+    })
     const codeNumber= createLabel('code', 'CODE:')
     const codeInput= createInput('code','code','','number')
     codeInput.classList.add('credit-card-input')
@@ -155,7 +163,7 @@ const americanExpressCreditCard=()=>{
         ev.target.value=value
         }
     )
-    input.addEventListener('blur',()=>{
+    input.addEventListener('input',()=>{
         const value= input.value.replace(/\D/g,'')
     const isAmerican= /^(34|37)/.test(value)
     if(!isAmerican&&value.length>=2){
@@ -202,7 +210,7 @@ window.location.href="index.html"
 return paybtn
 }
 
-const updateStock=async()=>{
+export const updateStock=async()=>{
     for(const cartItem of cart){
         const response= await fetch(`http://localhost:3000/products/${cartItem.id}`)
     
@@ -239,6 +247,7 @@ if(payMethod.value === 'credito'|| payMethod.value === 'debito'){
     const flag= document.querySelector("input[name='flag']:checked")
     if(!flag){
         alert("You must choose a flag for payment")
+        return
     }else{
     paymentData.flag=flag?.value
     }

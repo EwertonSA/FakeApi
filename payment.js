@@ -83,6 +83,8 @@ const content=contentModal(product)
 content.classList.add('payment-modal-content')
 const title= titleModal("Pagamento")
 const total=cartAmount()
+const div= document.createElement('div')
+
 const amount= formatter(total)
 
 const pix=pixContainer(product)
@@ -94,8 +96,8 @@ const debit= debitContainer(product)
 
 const button= closeButton(modal)
 
-
-content.append(title, amount, pix, credit, debit,button)
+div.append(pix,credit,debit)
+content.append(title, amount, div,button)
 modal.append(content)
 document.body.append(modal)
 
@@ -103,6 +105,7 @@ document.body.append(modal)
 export const closeButton=(modal)=>{
    
 const button=document.createElement('button')
+button.classList.add('payment-button')
 button.textContent='Close'
 button.addEventListener('click',()=>{
 modal.remove()
