@@ -1,7 +1,7 @@
 import { addToCart } from "./cart.js"
 
 const fetchProducts=async(product)=>{
-const res=await fetch("http://localhost:3000/Products").then(res=>res.json())
+const res=await fetch("/db.json").then(res=>res.json())
 return res
 console.log(res)
 await fetchProducts()
