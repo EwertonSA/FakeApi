@@ -1,7 +1,7 @@
 import { cartAmount } from "../../cart.js"
 import { closeButton, contentModal, createImage, createInput, createLabel, modalDiv, removeModal } from "../../payment.js"
 import { formatter } from "../../script.js"
-import {  paymentMethod, saveOrders, updateStock } from "../credit/credit.js"
+import {  paymentMethod, saveOrders,  } from "../credit/credit.js"
 
 import { backButton } from "../pix/pix.js"
 import { pixValue } from "../pix/pixValue.js"
@@ -56,7 +56,7 @@ saveOrders(paymentData)
 payments.push(paymentData)
 localStorage.setItem('payments',JSON.stringify(payments))
 localStorage.removeItem('cart')
-await updateStock()
+//await updateStock()
 removeModal(product)
 cartItems.innerHTML=''
 window.location.href="index.html"

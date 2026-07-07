@@ -1,11 +1,18 @@
 import { addToCart } from "./cart.js"
 
-const fetchProducts=async(product)=>{
-const res=await fetch("/db.json").then(res=>res.json())
-return res
-console.log(res)
-await fetchProducts()
-}
+
+const fetchProducts = async () => {
+  try {
+    const res = await fetch("./db.json");
+    const text = await res.text();
+    const data = JSON.parse(text);
+
+    return data.Products;
+  } catch (err) {
+    console.error("ERRO:", err);
+    throw err;
+  }
+};
 export const formatter=(value)=>{
     const formatted= Intl.NumberFormat('pt-BR',{
         compactDisplay:'long',
@@ -226,8 +233,9 @@ container.append(title,inStock,image,rating,price,description,add)
 
 document.addEventListener('DOMContentLoaded',async()=>{
     const data= await fetchProducts()
-    data.forEach((product)=>{
-        renderProducts(product)
-      
-    })
+     
+
+    data.forEach(product => {
+        renderProducts(product);
+    });
 })

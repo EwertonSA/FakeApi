@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "json-server": "json-server --watch db.json"
+    "json-server": "json-server --watch db.json",
+    "dev":"http-server -c-1 ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "http-server": "^14.1.1",
     "json-server": "^0.17.4"
   }
 }

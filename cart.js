@@ -171,6 +171,7 @@ export const renderCart=(product)=>{
 }
 export const renderAllCart=()=>{
     const container= document.querySelector("#cart")
+    if(!container)return
     container.innerHTML=''
     if(cart.length ===0){
         const message=document.createElement('h1')

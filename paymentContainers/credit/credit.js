@@ -195,7 +195,7 @@ const amount= document.querySelector("#budget")
 const cartItems= document.querySelector('#cart')
 const paymentData= await paymentMethod(product)
 console.log('teste',paymentData)
-await updateStock()
+//await updateStock()
 removeModal(product)
 saveOrders(paymentData)
 payments.push(paymentData)
@@ -210,7 +210,7 @@ window.location.href="index.html"
 return paybtn
 }
 
-export const updateStock=async()=>{
+/*export const updateStock=async()=>{
     for(const cartItem of cart){
         const response= await fetch(`http://localhost:3000/products/${cartItem.id}`)
     
@@ -225,7 +225,7 @@ export const updateStock=async()=>{
         body:JSON.stringify({...productDb,inStock:productDb.inStock-cartItem.quantity})
     })
 }
-}
+}*/
 export const paymentMethod=async(product)=>{
   const total= cartAmount()
 
